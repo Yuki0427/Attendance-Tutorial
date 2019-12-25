@@ -8,4 +8,18 @@ class User < ApplicationRecord
                     uniqueness: true
   has_secure_password
   validates :password, presence: true, length: { minimum: 6 }
+  
+  def User.digest(string)
+    cost = 
+      if ActiveModel::SecurePassword.min_cost
+        BCrypt::Engin::MIN_COST
+      else
+        BCrypt::Engin.cost
+      end
+    Bcrypt::Password.create(string, cost: cost)
+  end
+  
+  def User.new_token
+    SecureRandom.urlself_base64
+  end
 end
